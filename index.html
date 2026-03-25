@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>Cosas que amo de vos</title>
+
+<style>
+
+/* fondo moviéndose */
+
+@keyframes fondoMover{
+0%{background-position:50% 50%;}
+50%{background-position:55% 45%;}
+100%{background-position:50% 50%;}
+}
+
+body{
+margin:0;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+font-family:Arial;
+background-image:url("dibujo.png");
+background-size:110%;
+background-position:center;
+animation:fondoMover 40s ease-in-out infinite;
+overflow:hidden;
+}
+
+body::before{
+content:"";
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,35,0.65);
+z-index:-1;
+}
+
+/* TEXTO BONITO */
+
+#mensaje{
+font-size:36px;
+max-width:650px;
+margin-bottom:20px;
+min-height:40px;
+
+background:linear-gradient(90deg,#ffffff,#aee7ff,#caaaff,#ffffff);
+background-size:300%;
+-webkit-background-clip:text;
+color:transparent;
+
+animation:brilloTexto 6s linear infinite;
+
+text-shadow:
+0 0 8px rgba(255,255,255,0.5),
+0 0 20px rgba(170,220,255,0.4);
+}
+
+@keyframes brilloTexto{
+0%{background-position:0%}
+100%{background-position:300%}
+}
+
+#mensajeFinal{
+font-size:30px;
+margin-bottom:40px;
+opacity:0;
+transition:1s;
+color:white;
+text-shadow:0 0 10px white,0 0 30px #7dd3ff;
+max-width:650px;
+}
+
+/* BOTON */
+
+button{
+padding:15px 35px;
+font-size:18px;
+border:none;
+border-radius:40px;
+background:#7dd3ff;
+color:#002;
+cursor:pointer;
+transition:0.3s;
+box-shadow:0 0 10px #7dd3ff;
+}
+
+button:hover{
+transform:scale(1.08);
+box-shadow:0 0 20px #aee7ff,0 0 40px #aee7ff;
+}
+
+/* ESTRELLAS REALISTAS */
+
+.twinkle{
+position:fixed;
+background:white;
+border-radius:50%;
+opacity:0.4;
+animation:twinkle 3s infinite alternate;
+}
+
+@keyframes twinkle{
+0%{opacity:0.2;transform:scale(0.8)}
+100%{opacity:1;transform:scale(1.2)}
+}
+
+/* partículas */
+
+.particle{
+position:fixed;
+color:white;
+font-size:8px;
+opacity:0.3;
+animation:float 14s linear infinite;
+}
+
+@keyframes float{
+from{transform:translateY(100vh);}
+to{transform:translateY(-10vh);}
+}
+
+/* estrella fugaz */
+
+.shooting{
+position:fixed;
+width:4px;
+height:4px;
+background:white;
+border-radius:50%;
+box-shadow:0 0 6px white,0 0 20px white,0 0 40px white;
+}
+
+.shooting::after{
+content:"";
+position:absolute;
+width:250px;
+height:2px;
+background:linear-gradient(to right,transparent,white);
+left:-250px;
+top:1px;
+}
+
+@keyframes shoot{
+0%{transform:translate(-200px,-100px);opacity:1;}
+100%{transform:translate(900px,400px);opacity:0;}
+}
+
+/* estrellas click */
+
+.star{
+position:fixed;
+font-size:20px;
+pointer-events:none;
+animation:starPop 1s forwards;
+}
+
+@keyframes starPop{
+0%{opacity:1;transform:scale(0)}
+100%{opacity:0;transform:translateY(-60px) scale(1.5)}
+}
+
+/* GALAXIA FINAL */
+
+@keyframes galaxia{
+0%{
+transform:translate(0,0) scale(0);
+opacity:1;
+}
+100%{
+transform:translate(var(--x),var(--y)) scale(1.4);
+opacity:0;
+}
+}
+
+.galaxyStar{
+position:fixed;
+color:white;
+font-size:18px;
+animation:galaxia 3s ease-out forwards;
+}
+
+/* LLUVIA DE AMOR */
+
+@keyframes caerAmor{
+0%{
+transform:translateY(-40px) rotate(0deg);
+opacity:1;
+}
+100%{
+transform:translateY(110vh) rotate(360deg);
+opacity:0;
+}
+}
+
+.loveRain{
+
+position:fixed;
+font-size:22px;
+
+background:linear-gradient(90deg,#ffffff,#aee7ff,#caaaff,#ffffff);
+background-size:300%;
+
+-webkit-background-clip:text;
+color:transparent;
+
+animation:
+brilloTexto 6s linear infinite,
+caerAmor 4s linear forwards;
+
+pointer-events:none;
+
+}
+
+</style>
+</head>
+
+<body>
+
+<div id="mensaje"></div>
+<div id="mensajeFinal"></div>
+
+<button id="boton" onclick="nuevoMensaje(event)">
+Toca si sos curiosa 🌠
+</button>
+
+<script>
+
+const mensajes=[
+"Me encanta lo dulce que sos conmigo",
+"Tu risa me cambia el día completamente",
+"Me gusta que siempre estás cuando te necesito",
+"Tu momento down son de las cosas más lindas que vi",
+"Me encanta compartir momentos con vos",
+"Las llamadas en la noche me relajas mucho",
+"Tu ternura es única",
+"Sos una de las personas más especiales que conocí",
+"Tu forma de querer me encanta",
+"Me haces sentir muy afortunado",
+"Me encanta el orto gigantovich y las 2 puntas hermosas que tenes",
+"Tu forma de mirar las cosas me encanta",
+"Cuando hablas siento paz",
+"Tu compañía hace todo mejor",
+"Tu corazón es gigante (tu orto tambien)",
+"Me gusta como me haces sentir",
+"Nuestros momentos de autista los aprecio siempre",
+"Con vos todo es más bonito",
+"Me encanta poder llamarte mía",
+"Simplemente sos increíble"
+]
+
+let index=0
+let primeraVez=true
+let escribiendo=false
+
+function escribirTexto(texto){
+
+if(escribiendo) return
+
+escribiendo=true
+
+const mensaje=document.getElementById("mensaje")
+const boton=document.getElementById("boton")
+
+boton.disabled=true
+mensaje.innerHTML=""
+
+let i=0
+
+let intervalo=setInterval(()=>{
+
+mensaje.innerHTML+=texto.charAt(i)
+
+i++
+
+if(i>=texto.length){
+clearInterval(intervalo)
+escribiendo=false
+boton.disabled=false
+}
+
+},35)
+
+}
+
+/* EXPLOSION GALAXIA */
+
+function explosionGalaxia(){
+
+let centroX=window.innerWidth/2
+let centroY=window.innerHeight/2
+
+for(let i=0;i<220;i++){
+
+let star=document.createElement("div")
+
+star.className="galaxyStar"
+
+star.innerHTML=Math.random()>0.5?"⭐":"✦"
+
+let angulo=Math.random()*Math.PI*2
+let distancia=200+Math.random()*600
+
+let x=Math.cos(angulo)*distancia+"px"
+let y=Math.sin(angulo)*distancia+"px"
+
+star.style.left=centroX+"px"
+star.style.top=centroY+"px"
+
+star.style.setProperty("--x",x)
+star.style.setProperty("--y",y)
+
+document.body.appendChild(star)
+
+setTimeout(()=>star.remove(),3000)
+
+}
+
+}
+
+/* LLUVIA DE CORAZONES */
+
+function lluviaAmor(){
+
+for(let i=0;i<200;i++){
+
+setTimeout(()=>{
+
+let item=document.createElement("div")
+
+item.className="loveRain"
+
+item.innerHTML=Math.random()>0.5?"💖":"⭐"
+
+item.style.left=Math.random()*window.innerWidth+"px"
+item.style.top="-40px"
+
+document.body.appendChild(item)
+
+setTimeout(()=>item.remove(),4000)
+
+},i*25)
+
+}
+
+}
+
+function nuevoMensaje(e){
+
+if(escribiendo) return
+
+const boton=document.getElementById("boton")
+
+if(index<mensajes.length){
+
+escribirTexto(mensajes[index])
+
+if(primeraVez){
+boton.innerText="Seguí tocando, todavía hay más ✨"
+primeraVez=false
+}
+
+index++
+
+}else{
+
+document.getElementById("mensaje").innerHTML="te amo ❤️"
+
+const final=document.getElementById("mensajeFinal")
+
+final.innerHTML="creo que ya sabías todo eso igual pero me encanta decirtelo 💫"
+final.style.opacity=1
+
+boton.innerText="Ya descubriste un poco ❤️"
+
+explosionGalaxia()
+
+setTimeout(()=>{
+lluviaAmor()
+},1200)
+
+}
+
+/* estrellas click */
+
+for(let i=0;i<12;i++){
+
+let star=document.createElement("div")
+
+star.className="star"
+
+star.innerText=Math.random()>0.5?"⭐":"💖"
+
+star.style.left=(e.clientX+(Math.random()*120-60))+"px"
+star.style.top=(e.clientY+40+(Math.random()*60))+"px"
+
+document.body.appendChild(star)
+
+setTimeout(()=>{star.remove()},1000)
+
+}
+
+}
+
+/* estrellas fugaces */
+
+function crearEstrellaFugaz(){
+
+let s=document.createElement("div")
+
+s.className="shooting"
+
+s.style.left=Math.random()*window.innerWidth+"px"
+s.style.top=Math.random()*200+"px"
+
+s.style.animation="shoot 1.4s linear forwards"
+
+document.body.appendChild(s)
+
+setTimeout(()=>{s.remove()},1400)
+
+}
+
+setInterval(()=>{
+crearEstrellaFugaz()
+},900)
+
+/* cielo estrellas */
+
+for(let i=0;i<220;i++){
+
+let star=document.createElement("div")
+
+star.className="twinkle"
+
+let size=Math.random()*3
+
+star.style.width=size+"px"
+star.style.height=size+"px"
+
+star.style.left=Math.random()*window.innerWidth+"px"
+star.style.top=Math.random()*window.innerHeight+"px"
+
+star.style.animationDelay=Math.random()*3+"s"
+
+document.body.appendChild(star)
+
+}
+
+/* partículas */
+
+for(let i=0;i<60;i++){
+
+let p=document.createElement("div")
+
+p.className="particle"
+
+p.innerHTML="✦"
+
+p.style.left=Math.random()*window.innerWidth+"px"
+p.style.animationDuration=10+Math.random()*12+"s"
+
+document.body.appendChild(p)
+
+}
+
+</script>
+
+</body>
+</html>
